@@ -1568,6 +1568,44 @@
       }
 
       initQuiz();
-    </script>
+    
+      // === Timer ===
+      let timeLeft = 120; // 120 ثانية = دقيقتين
+      const timerElement = document.createElement("div");
+      timerElement.style.textAlign = "center";
+      timerElement.style.fontWeight = "bold";
+      timerElement.style.marginBottom = "15px";
+      timerElement.style.color = "red";
+      timerElement.style.fontSize = "1.2rem";
+      progressText.before(timerElement); // نحط المؤقت فوق شريط التقدم
+
+      function updateTimerDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerElement.textContent = `الوقت المتبقي: ${minutes}:${seconds
+          .toString()
+          .padStart(2, "0")}`;
+      }
+
+      function startTimer() {
+        updateTimerDisplay();
+        const timerInterval = setInterval(() => {
+          timeLeft--;
+          updateTimerDisplay();
+
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            calculateScore(); // لما الوقت يخلص يحسب الدرجة
+            nextBtn.disabled = true;
+            prevBtn.disabled = true;
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = true);
+            timerElement.textContent = "انتهى الوقت!";
+          }
+        }, 1000);
+      }
+
+      startTimer(); // شغل المؤقت عند بداية الكويز
+
+</script>
   </body>
 </html>
